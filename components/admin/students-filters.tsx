@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 import { Search, X } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { NativeSelect } from "@/components/ui/native-select"
 import { ROLES, ROLE_LABELS, TARIFFS, TARIFF_LABELS } from "@/lib/constants"
 
 export function StudentsFilters({ q, role, tariff, status }: { q: string; role: string; tariff: string; status: string }) {
@@ -31,46 +31,31 @@ export function StudentsFilters({ q, role, tariff, status }: { q: string; role: 
         update({ q: String(fd.get("q") ?? "") })
       }}
     >
-      <div className="relative flex-1 min-w-56">
+      <div className="relative min-w-56 flex-1">
         <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
         <Input name="q" defaultValue={q} placeholder="Имя или email…" className="pl-9" aria-label="Поиск учеников" />
       </div>
-      <Select value={role} onValueChange={(v) => update({ role: v })}>
-        <SelectTrigger className="w-40" aria-label="Роль">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">Все роли</SelectItem>
-          {ROLES.map((r) => (
-            <SelectItem key={r} value={r}>
-              {ROLE_LABELS[r]}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Select value={tariff} onValueChange={(v) => update({ tariff: v })}>
-        <SelectTrigger className="w-36" aria-label="Тариф">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">Все тарифы</SelectItem>
-          {TARIFFS.map((t) => (
-            <SelectItem key={t} value={t}>
-              {TARIFF_LABELS[t]}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Select value={status} onValueChange={(v) => update({ status: v })}>
-        <SelectTrigger className="w-40" aria-label="Статус">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">Любой статус</SelectItem>
-          <SelectItem value="active">Активные</SelectItem>
-          <SelectItem value="banned">Заблокированные</SelectItem>
-        </SelectContent>
-      </Select>
+      <NativeSelect className="w-40" value={role} onChange={(e) => update({ role: e.target.value })} aria-label="Роль">
+        <option value="all">Все роли</option>
+        {ROLES.map((r) => (
+          <option key={r} value={r}>
+            {ROLE_LABELS[r]}
+          </option>
+        ))}
+      </NativeSelect>
+      <NativeSelect className="w-36" value={tariff} onChange={(e) => update({ tariff: e.target.value })} aria-label="Тариф">
+        <option value="all">Все тарифы</option>
+        {TARIFFS.map((t) => (
+          <option key={t} value={t}>
+            {TARIFF_LABELS[t]}
+          </option>
+        ))}
+      </NativeSelect>
+      <NativeSelect className="w-40" value={status} onChange={(e) => update({ status: e.target.value })} aria-label="Статус">
+        <option value="all">Любой статус</option>
+        <option value="active">Активные</option>
+        <option value="banned">Заблокированные</option>
+      </NativeSelect>
       <Button type="submit" variant="secondary">
         Найти
       </Button>

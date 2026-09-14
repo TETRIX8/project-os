@@ -1,5 +1,4 @@
 import { count, eq } from "drizzle-orm"
-import { BarChart3, BookOpen, ClipboardCheck, FolderOpen, LayoutDashboard, ScrollText, Users } from "lucide-react"
 import { db } from "@/lib/db"
 import { submissions } from "@/lib/db/schema"
 import { hasPermission, requirePermissionPage } from "@/lib/rbac"
@@ -12,17 +11,17 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const user = await requirePermissionPage("admin.access")
   const [{ pending }] = await db.select({ pending: count() }).from(submissions).where(eq(submissions.status, "pending"))
 
-  const main: NavItem[] = [{ href: "/admin", label: "Обзор", icon: LayoutDashboard, exact: true }]
-  if (hasPermission(user.role, "reviews.view")) main.push({ href: "/admin/reviews", label: "Проверка", icon: ClipboardCheck, badge: pending })
-  if (hasPermission(user.role, "students.view")) main.push({ href: "/admin/students", label: "Ученики", icon: Users })
+  const main: NavItem[] = [{ href: "/admin", label: "Обзор", icon: "dashboard", exact: true }]
+  if (hasPermission(user.role, "reviews.view")) main.push({ href: "/admin/reviews", label: "Проверка", icon: "clipboardCheck", badge: pending })
+  if (hasPermission(user.role, "students.view")) main.push({ href: "/admin/students", label: "Ученики", icon: "users" })
   if (hasPermission(user.role, "content.view")) {
-    main.push({ href: "/admin/content", label: "Контент", icon: BookOpen })
-    main.push({ href: "/admin/materials", label: "Материалы", icon: FolderOpen })
+    main.push({ href: "/admin/content", label: "Контент", icon: "book" })
+    main.push({ href: "/admin/materials", label: "Материалы", icon: "folder" })
   }
 
   const system: NavItem[] = []
-  if (hasPermission(user.role, "analytics.view")) system.push({ href: "/admin/analytics", label: "Аналитика", icon: BarChart3 })
-  if (hasPermission(user.role, "audit.view")) system.push({ href: "/admin/audit", label: "Аудит", icon: ScrollText })
+  if (hasPermission(user.role, "analytics.view")) system.push({ href: "/admin/analytics", label: "Аналитика", icon: "chart" })
+  if (hasPermission(user.role, "audit.view")) system.push({ href: "/admin/audit", label: "Аудит", icon: "scroll" })
 
   const sections = [{ title: "Управление", items: main }, ...(system.length ? [{ title: "Система", items: system }] : [])]
 

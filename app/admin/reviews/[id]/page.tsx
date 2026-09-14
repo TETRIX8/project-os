@@ -9,7 +9,14 @@ import { StatusBadge, TariffBadge } from "@/components/status-badge"
 import { ReviewForm } from "@/components/admin/review-form"
 import { ReviewHistory } from "@/components/lesson/review-history"
 import { formatDateTime } from "@/lib/format"
-import { ASSIGNMENT_FORMAT_LABELS, type AssignmentFormat, type SubmissionStatus, type Tariff } from "@/lib/constants"
+import {
+  DEFAULT_FIELDS,
+  FIELD_TEMPLATES,
+  FORMAT_LABELS,
+  type AssignmentFormat,
+  type SubmissionStatus,
+  type Tariff,
+} from "@/lib/constants"
 
 export const metadata: Metadata = { title: "Проверка работы" }
 
@@ -23,7 +30,16 @@ export default async function ReviewDetailPage({ params }: { params: Promise<{ i
 
   const { submission, student, lesson, reviews } = detail
   const canGrade = hasPermission(user.role, "reviews.grade")
-  const fields = (submission.fields ?? {}) as Record<string, string>
+  const rawFields = (submission.fields ?? {}) as Record<string, string>
+  // Show fields in the template order with the same labels the student saw;
+  // anything outside the template (legacy keys) falls back to the raw key.
+  const template = FIELD_TEMPLATES[lesson.id] ?? DEFAULT_FIELDS
+  const fields = [
+    ...template.filter((f) => rawFields[f.key]?.trim()).map((f) => ({ key: f.key, label: f.label, value: rawFields[f.key] })),
+    ...Object.entries(rawFields)
+      .filter(([k, v]) => v?.trim() && !template.some((f) => f.key === k))
+      .map(([k, v]) => ({ key: k, label: k, value: v })),
+  ]
 
   return (
     <div className="flex flex-col gap-6">
@@ -77,18 +93,18 @@ export default async function ReviewDetailPage({ params }: { params: Promise<{ i
               </a>
             )}
 
-            {Object.keys(fields).length > 0 && (
+            {fields.length > 0 && (
               <dl className="grid gap-3 sm:grid-cols-2">
-                {Object.entries(fields).map(([k, v]) => (
-                  <div key={k} className="flex flex-col gap-1 rounded-lg bg-surface p-3">
-                    <dt className="text-xs text-muted-foreground">{k}</dt>
-                    <dd className="whitespace-pre-wrap text-sm">{v}</dd>
+                {fields.map((f) => (
+                  <div key={f.key} className="flex flex-col gap-1 rounded-lg bg-surface p-3">
+                    <dt className="text-xs text-muted-foreground">{f.label}</dt>
+                    <dd className="whitespace-pre-wrap text-sm">{f.value}</dd>
                   </div>
                 ))}
               </dl>
             )}
 
-            {!submission.contentText && !submission.contentLink && !submission.fileUrl && Object.keys(fields).length === 0 && (
+            {!submission.contentText && !submission.contentLink && !submission.fileUrl && fields.length === 0 && (
               <p className="text-sm text-muted-foreground">Ученик пока ничего не отправил.</p>
             )}
           </section>
@@ -97,7 +113,7 @@ export default async function ReviewDetailPage({ params }: { params: Promise<{ i
             <h2 id="task-heading" className="flex items-center gap-2 font-semibold">
               <FileText className="size-4 text-muted-foreground" /> Условие задания
             </h2>
-            <p className="text-xs text-muted-foreground">Формат: {ASSIGNMENT_FORMAT_LABELS[lesson.assignmentFormat as AssignmentFormat]}</p>
+            <p className="text-xs text-muted-foreground">Формат: {FORMAT_LABELS[lesson.assignmentFormat as AssignmentFormat]}</p>
             <p className="whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground">{lesson.assignment ?? "—"}</p>
           </section>
 

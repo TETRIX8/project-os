@@ -15,10 +15,8 @@ export function MaterialDelete({ id, title }: { id: number; title: string }) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="ghost" size="icon-sm" className="text-destructive hover:text-destructive" aria-label="Удалить материал">
-          <Trash2 />
-        </Button>
+      <DialogTrigger render={<Button variant="ghost" size="icon-sm" className="text-destructive hover:text-destructive" aria-label="Удалить материал" />}>
+        <Trash2 />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

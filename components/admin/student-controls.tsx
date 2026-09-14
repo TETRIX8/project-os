@@ -8,7 +8,7 @@ import { setUserBanned, setUserRole, setUserTariff } from "@/app/actions/admin"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { NativeSelect } from "@/components/ui/native-select"
 import { assignableRoles, ROLE_LABELS, TARIFFS, TARIFF_LABELS, type Role, type Tariff } from "@/lib/constants"
 
 export function StudentControls({
@@ -54,37 +54,32 @@ export function StudentControls({
 
       {perms.manage && (
         <div className="flex flex-col gap-1.5">
-          <Label>Тариф</Label>
-          <Select value={tariff} disabled={pending} onValueChange={(v) => run(setUserTariff(userId, v), "Тариф обновлён")}>
-            <SelectTrigger aria-label="Тариф">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {TARIFFS.map((t) => (
-                <SelectItem key={t} value={t}>
-                  {TARIFF_LABELS[t]}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <Label htmlFor="student-tariff">Тариф</Label>
+          <NativeSelect id="student-tariff" value={tariff} disabled={pending} onChange={(e) => run(setUserTariff(userId, e.target.value), "Тариф обновлён")}>
+            {TARIFFS.map((t) => (
+              <option key={t} value={t}>
+                {TARIFF_LABELS[t]}
+              </option>
+            ))}
+          </NativeSelect>
         </div>
       )}
 
       {perms.roles && (
         <div className="flex flex-col gap-1.5">
-          <Label>Роль</Label>
-          <Select value={role} disabled={pending || isSelf || (role === "owner" && actorRole !== "owner")} onValueChange={(v) => run(setUserRole(userId, v), "Роль обновлена")}>
-            <SelectTrigger aria-label="Роль">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {(roles.includes(role) ? roles : [role, ...roles]).map((r) => (
-                <SelectItem key={r} value={r}>
-                  {ROLE_LABELS[r]}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <Label htmlFor="student-role">Роль</Label>
+          <NativeSelect
+            id="student-role"
+            value={role}
+            disabled={pending || isSelf || (role === "owner" && actorRole !== "owner")}
+            onChange={(e) => run(setUserRole(userId, e.target.value), "Роль обновлена")}
+          >
+            {(roles.includes(role) ? roles : [role, ...roles]).map((r) => (
+              <option key={r} value={r}>
+                {ROLE_LABELS[r]}
+              </option>
+            ))}
+          </NativeSelect>
           {isSelf && <p className="text-[11px] text-muted-foreground">Собственную роль менять нельзя.</p>}
         </div>
       )}

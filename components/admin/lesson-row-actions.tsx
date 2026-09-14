@@ -38,10 +38,8 @@ export function LessonRowActions({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon-sm" disabled={pending} aria-label="Действия с уроком">
-          {pending ? <Loader2 className="animate-spin" /> : <MoreHorizontal />}
-        </Button>
+      <DropdownMenuTrigger render={<Button variant="ghost" size="icon-sm" disabled={pending} aria-label="Действия с уроком" />}>
+        {pending ? <Loader2 className="animate-spin" /> : <MoreHorizontal />}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {canPublish && !archived && (

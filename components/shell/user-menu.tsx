@@ -4,7 +4,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { LayoutDashboard, LogOut, Settings, Shield, UserRound } from "lucide-react"
 import { authClient } from "@/lib/auth-client"
-import { hasPermission, type CurrentUser } from "@/lib/rbac"
+import { hasPermission, type CurrentUser } from "@/lib/permissions"
 import { initials } from "@/lib/format"
 import { ROLE_LABELS } from "@/lib/constants"
 import {

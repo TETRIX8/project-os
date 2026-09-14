@@ -8,7 +8,7 @@ import { TariffBadge } from "@/components/status-badge"
 import { LinkButton } from "@/components/ui/link-button"
 import { LevelEditor } from "@/components/admin/level-editor"
 import { LessonRowActions } from "@/components/admin/lesson-row-actions"
-import { ASSIGNMENT_FORMAT_LABELS, type AssignmentFormat, type Tariff } from "@/lib/constants"
+import { FORMAT_LABELS, type AssignmentFormat, type Tariff } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 
 export const metadata: Metadata = { title: "Контент курса" }
@@ -84,7 +84,7 @@ export default async function ContentPage() {
                         <span className="inline-flex items-center gap-1">
                           <Clock className="size-3" /> {l.durationMin} мин
                         </span>
-                        <span>{ASSIGNMENT_FORMAT_LABELS[l.assignmentFormat as AssignmentFormat]}</span>
+                        <span>{FORMAT_LABELS[l.assignmentFormat as AssignmentFormat]}</span>
                         {!l.videoUrl && <span className="text-warning">нет видео</span>}
                       </p>
                     </div>

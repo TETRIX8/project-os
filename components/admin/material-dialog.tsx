@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { NativeSelect } from "@/components/ui/native-select"
 import { MATERIAL_CATEGORIES, MATERIAL_CATEGORY_LABELS, TARIFFS, TARIFF_LABELS, type MaterialCategory, type Tariff } from "@/lib/constants"
 
 type Material = { id: number; title: string; description: string | null; category: string; minTariff: string }
@@ -26,17 +26,15 @@ export function MaterialDialog({ material }: { material?: Material }) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {material ? (
-          <Button variant="ghost" size="icon-sm" aria-label="Редактировать материал">
-            <Pencil />
-          </Button>
-        ) : (
-          <Button>
-            <Plus /> Добавить материал
-          </Button>
-        )}
-      </DialogTrigger>
+      {material ? (
+        <DialogTrigger render={<Button variant="ghost" size="icon-sm" aria-label="Редактировать материал" />}>
+          <Pencil />
+        </DialogTrigger>
+      ) : (
+        <DialogTrigger render={<Button />}>
+          <Plus /> Добавить материал
+        </DialogTrigger>
+      )}
       <DialogContent>
         <form
           className="flex flex-col gap-5"
@@ -71,33 +69,23 @@ export function MaterialDialog({ material }: { material?: Material }) {
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="m-cat">Категория</Label>
-              <Select value={category} onValueChange={(v) => setCategory(v as MaterialCategory)}>
-                <SelectTrigger id="m-cat">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {MATERIAL_CATEGORIES.map((c) => (
-                    <SelectItem key={c} value={c}>
-                      {MATERIAL_CATEGORY_LABELS[c]}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <NativeSelect id="m-cat" value={category} onChange={(e) => setCategory(e.target.value as MaterialCategory)}>
+                {MATERIAL_CATEGORIES.map((c) => (
+                  <option key={c} value={c}>
+                    {MATERIAL_CATEGORY_LABELS[c]}
+                  </option>
+                ))}
+              </NativeSelect>
             </div>
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="m-tariff">Минимальный тариф</Label>
-              <Select value={minTariff} onValueChange={(v) => setMinTariff(v as Tariff)}>
-                <SelectTrigger id="m-tariff">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {TARIFFS.map((t) => (
-                    <SelectItem key={t} value={t}>
-                      {TARIFF_LABELS[t]}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <NativeSelect id="m-tariff" value={minTariff} onChange={(e) => setMinTariff(e.target.value as Tariff)}>
+                {TARIFFS.map((t) => (
+                  <option key={t} value={t}>
+                    {TARIFF_LABELS[t]}
+                  </option>
+                ))}
+              </NativeSelect>
             </div>
           </div>
           <DialogFooter>

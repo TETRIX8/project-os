@@ -60,6 +60,16 @@ export const FORMAT_LABELS: Record<AssignmentFormat, string> = {
   fields: "Несколько полей по шаблону",
 }
 
+export const MATERIAL_CATEGORIES = ["template", "guide", "checklist", "bonus"] as const
+export type MaterialCategory = (typeof MATERIAL_CATEGORIES)[number]
+
+export const MATERIAL_CATEGORY_LABELS: Record<MaterialCategory, string> = {
+  template: "Шаблоны",
+  guide: "Гайды",
+  checklist: "Чек-листы",
+  bonus: "Бонусы",
+}
+
 export const FIELD_TEMPLATES: Record<number, { key: string; label: string }[]> = {
   5: [
     { key: "name", label: "Название услуги" },

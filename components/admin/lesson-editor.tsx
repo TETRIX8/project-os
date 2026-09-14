@@ -11,8 +11,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ASSIGNMENT_FORMATS, ASSIGNMENT_FORMAT_LABELS, TARIFFS, TARIFF_LABELS, type AssignmentFormat, type Tariff } from "@/lib/constants"
+import { NativeSelect } from "@/components/ui/native-select"
+import { ASSIGNMENT_FORMATS, FORMAT_LABELS, TARIFFS, TARIFF_LABELS, type AssignmentFormat, type Tariff } from "@/lib/constants"
 
 type Level = { id: number; order: number; title: string }
 type Lesson = {
@@ -123,18 +123,13 @@ export function LessonEditor({ levels, lesson }: { levels: Level[]; lesson: Less
               <Textarea id="assignment" rows={6} value={form.assignment} onChange={(e) => set("assignment", e.target.value)} maxLength={5000} />
             </Field>
             <Field id="assignmentFormat" label="Формат ответа">
-              <Select value={form.assignmentFormat} onValueChange={(v) => set("assignmentFormat", v as AssignmentFormat)}>
-                <SelectTrigger id="assignmentFormat">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {ASSIGNMENT_FORMATS.map((f) => (
-                    <SelectItem key={f} value={f}>
-                      {ASSIGNMENT_FORMAT_LABELS[f]}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <NativeSelect id="assignmentFormat" value={form.assignmentFormat} onChange={(e) => set("assignmentFormat", e.target.value as AssignmentFormat)}>
+                {ASSIGNMENT_FORMATS.map((f) => (
+                  <option key={f} value={f}>
+                    {FORMAT_LABELS[f]}
+                  </option>
+                ))}
+              </NativeSelect>
             </Field>
           </Card>
         </div>
@@ -151,32 +146,22 @@ export function LessonEditor({ levels, lesson }: { levels: Level[]; lesson: Less
           </Card>
           <Card title="Доступ">
             <Field id="levelId" label="Уровень">
-              <Select value={String(form.levelId)} onValueChange={(v) => set("levelId", Number(v))}>
-                <SelectTrigger id="levelId">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {levels.map((l) => (
-                    <SelectItem key={l.id} value={String(l.id)}>
-                      {l.order}. {l.title}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <NativeSelect id="levelId" value={String(form.levelId)} onChange={(e) => set("levelId", Number(e.target.value))}>
+                {levels.map((l) => (
+                  <option key={l.id} value={String(l.id)}>
+                    {l.order}. {l.title}
+                  </option>
+                ))}
+              </NativeSelect>
             </Field>
             <Field id="minTariff" label="Минимальный тариф">
-              <Select value={form.minTariff} onValueChange={(v) => set("minTariff", v as Tariff)}>
-                <SelectTrigger id="minTariff">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {TARIFFS.map((t) => (
-                    <SelectItem key={t} value={t}>
-                      {TARIFF_LABELS[t]}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <NativeSelect id="minTariff" value={form.minTariff} onChange={(e) => set("minTariff", e.target.value as Tariff)}>
+                {TARIFFS.map((t) => (
+                  <option key={t} value={t}>
+                    {TARIFF_LABELS[t]}
+                  </option>
+                ))}
+              </NativeSelect>
             </Field>
           </Card>
         </aside>

@@ -8,7 +8,7 @@ import { NavLinks, type NavItem } from "@/components/shell/nav-links"
 import { UserMenu } from "@/components/shell/user-menu"
 import { Button } from "@/components/ui/button"
 import { TariffBadge } from "@/components/status-badge"
-import type { CurrentUser } from "@/lib/rbac"
+import type { CurrentUser } from "@/lib/permissions"
 import { cn } from "@/lib/utils"
 
 type Section = { title?: string; items: NavItem[] }

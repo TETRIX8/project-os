@@ -23,10 +23,8 @@ export function LevelEditor({ level }: { level: Level }) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="ghost" size="icon-sm" aria-label="Редактировать уровень">
-          <Pencil />
-        </Button>
+      <DialogTrigger render={<Button variant="ghost" size="icon-sm" aria-label="Редактировать уровень" />}>
+        <Pencil />
       </DialogTrigger>
       <DialogContent>
         <form
